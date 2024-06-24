@@ -10,11 +10,11 @@ import jakarta.validation.constraints.NotNull;
 
 public record FuncionarioDTO(
 
-                Long id,
-                @NotNull String nome,
-                @JsonFormat(pattern = "dd/MM/yyyy") LocalDate dataNascimento,
-                @NotNull @NotBlank String funcao,
-                BigDecimal salario
+        Long id,
+        @NotNull String nome,
+        @JsonFormat(pattern = "dd/MM/yyyy") LocalDate dataNascimento,
+        @NotNull @NotBlank String funcao,
+        BigDecimal salario
 
 ) {
 

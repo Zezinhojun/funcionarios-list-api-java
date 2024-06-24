@@ -6,10 +6,13 @@ import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,23 +23,24 @@ import com.jose.teste_pratico_iniflex.dto.FuncionarioDTO;
 import com.jose.teste_pratico_iniflex.model.Funcionario;
 import com.jose.teste_pratico_iniflex.service.FuncionarioService;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
+@Validated
 @RestController
+@Configuration
 @RequestMapping("/api/funcionarios")
 @AllArgsConstructor
 
 public class FuncionarioController {
 
-    private FuncionarioService funcionarioService;
+    private final FuncionarioService funcionarioService;
 
     @GetMapping("/inserir-funcionarios")
     public ResponseEntity<String> inserirFuncionarios() {
         List<FuncionarioDTO> funcionariosInseridos = funcionarioService.gerarFuncionariosFicticios();
         int quantidadeInserida = funcionariosInseridos.size();
-
         String mensagem = String.format("Inseridos %d funcionários fictícios com sucesso!", quantidadeInserida);
         return ResponseEntity.ok(mensagem);
     }
@@ -50,15 +54,8 @@ public class FuncionarioController {
 
     @DeleteMapping("/{nome}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> removerFuncionarioPorNome(String nome) {
-        String nomeDecodificado;
-        try {
-            nomeDecodificado = URLDecoder.decode(nome, "UTF-8");
-            funcionarioService.removerFuncionarioPorNome(nomeDecodificado);
-            return ResponseEntity.noContent().build();
-        } catch (UnsupportedEncodingException | EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public void removerFuncionarioPorNome(@PathVariable @NotNull String nome) {
+        funcionarioService.removerFuncionarioPorNome(nome);
     }
 
     @GetMapping("")

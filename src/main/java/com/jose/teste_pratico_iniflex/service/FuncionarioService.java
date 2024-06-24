@@ -71,8 +71,10 @@ public class FuncionarioService {
     }
 
     public void removerFuncionarioPorNome(@NotNull String nome) {
-        funcionarioRepository.delete(funcionarioRepository.findByNome(nome)
-                .orElseThrow(() -> new RecordNotFoundException(nome)));
+        Optional<Funcionario> funcionarioOpt = funcionarioRepository.findByNome(nome);
+        if (funcionarioOpt.isPresent()) {
+            funcionarioRepository.delete(funcionarioOpt.get());
+        }
     }
 
     public List<Funcionario> listarTodosOsFuncionarios() {
