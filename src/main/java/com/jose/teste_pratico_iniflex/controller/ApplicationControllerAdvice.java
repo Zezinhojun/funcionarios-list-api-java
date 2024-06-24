@@ -1,6 +1,7 @@
 package com.jose.teste_pratico_iniflex.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,9 +16,8 @@ import jakarta.validation.ConstraintViolationException;
 public class ApplicationControllerAdvice {
 
     @ExceptionHandler(RecordNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNotFoundExecepction(RecordNotFoundException ex) {
-        return ex.getMessage();
+    public ResponseEntity<String> handleRecordNotFoundException(RecordNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

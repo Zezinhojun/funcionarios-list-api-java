@@ -32,6 +32,7 @@ public class FuncionarioService {
     private final FuncionarioMapper funcionarioMapper;
     private final Faker faker = new Faker();
     private final BigDecimal minSalary = new BigDecimal("1212.00");
+    private static final String FUNCIONARIO_NAO_ENCONTRADO = "Não foram encontrados funcionários.";
 
     public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper) {
         this.funcionarioRepository = funcionarioRepository;
@@ -66,17 +67,23 @@ public class FuncionarioService {
         return funcionariosDTO;
     }
 
-    public void removerFuncionarioPorNome(@NotNull String nome) {
+    public String removerFuncionarioPorNome(@NotNull String nome) {
         Optional<Funcionario> funcionarioOpt = funcionarioRepository.findByNome(nome);
         if (funcionarioOpt.isPresent()) {
             funcionarioRepository.delete(funcionarioOpt.get());
+            return "Funcionário deletado com sucesso: " + nome;
         } else {
-            throw new RecordNotFoundException(nome);
+            throw new RecordNotFoundException("Esse funcionário não existe: " + nome);
         }
     }
 
     public List<FuncionarioDTO> listarTodosOsFuncionarios() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
+
+        if (funcionarios.isEmpty()) {
+            throw new RecordNotFoundException(FUNCIONARIO_NAO_ENCONTRADO);
+        }
+
         return funcionarios.stream()
                 .map(funcionarioMapper::toDto)
                 .collect(Collectors.toList());
@@ -84,6 +91,9 @@ public class FuncionarioService {
 
     public List<FuncionarioDTO> aumentarSalario() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        if (funcionarios.isEmpty()) {
+            throw new RecordNotFoundException(FUNCIONARIO_NAO_ENCONTRADO);
+        }
 
         DecimalFormat df = new DecimalFormat("#.##");
 
@@ -103,6 +113,11 @@ public class FuncionarioService {
 
     public Map<String, List<FuncionarioDTO>> agruparPorFuncao() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
+
+        if (funcionarios.isEmpty()) {
+            throw new RecordNotFoundException(FUNCIONARIO_NAO_ENCONTRADO);
+        }
+
         return funcionarios.stream()
                 .map(funcionarioMapper::toDto)
                 .collect(Collectors.groupingBy(FuncionarioDTO::funcao));
@@ -110,6 +125,10 @@ public class FuncionarioService {
 
     public List<FuncionarioDTO> listarFuncionariosAniversariantes() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
+
+        if (funcionarios.isEmpty()) {
+            throw new RecordNotFoundException(FUNCIONARIO_NAO_ENCONTRADO);
+        }
 
         List<Funcionario> funcionariosFiltrados = funcionarios.stream()
                 .filter(funcionario -> {
@@ -125,6 +144,9 @@ public class FuncionarioService {
 
     public Map<String, Object> funcionarioMaisVelho() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        if (funcionarios.isEmpty()) {
+            throw new RecordNotFoundException(FUNCIONARIO_NAO_ENCONTRADO);
+        }
 
         Optional<Funcionario> funcionarioOpt = funcionarios.stream()
                 .max(Comparator.comparingInt(
@@ -142,6 +164,9 @@ public class FuncionarioService {
 
     public List<FuncionarioDTO> listarFuncionariosOrdenAlfabetica() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        if (funcionarios.isEmpty()) {
+            throw new RecordNotFoundException(FUNCIONARIO_NAO_ENCONTRADO);
+        }
         return funcionarios.stream()
                 .map(funcionarioMapper::toDto)
                 .sorted(Comparator.comparing(FuncionarioDTO::nome))
@@ -150,6 +175,9 @@ public class FuncionarioService {
 
     public BigDecimal calcularTotalSalarios() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        if (funcionarios.isEmpty()) {
+            throw new RecordNotFoundException(FUNCIONARIO_NAO_ENCONTRADO);
+        }
 
         return funcionarios.stream()
                 .map(Funcionario::getSalario)
@@ -158,6 +186,9 @@ public class FuncionarioService {
 
     public List<Map<String, Object>> calcularQuantificarSalariosMinimosDosFuncionarios() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        if (funcionarios.isEmpty()) {
+            throw new RecordNotFoundException(FUNCIONARIO_NAO_ENCONTRADO);
+        }
 
         return funcionarios.stream()
                 .map(funcionario -> {
