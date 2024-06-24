@@ -3,11 +3,13 @@ package com.jose.teste_pratico_iniflex.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,7 @@ public class FuncionarioService {
     private final Faker faker = new Faker();
     private final BigDecimal minSalary = new BigDecimal("1212.00");
     private static final String FUNCIONARIO_NAO_ENCONTRADO = "Não foram encontrados funcionários.";
+    int numeroFuncionarios = 55; // Defina o número desejado de funcionários a serem gerados
 
     public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper) {
         this.funcionarioRepository = funcionarioRepository;
@@ -42,7 +45,7 @@ public class FuncionarioService {
     public List<FuncionarioDTO> gerarFuncionariosFicticios() {
         List<FuncionarioDTO> funcionariosDTO = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < numeroFuncionarios; i++) {
             Long id = (long) (i + 1);
             String nome = faker.name().fullName();
             LocalDate dataNascimento = faker.date().birthday().toInstant()
@@ -211,5 +214,14 @@ public class FuncionarioService {
                     return mapaFuncionario;
                 })
                 .collect(Collectors.toList());
+    }
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+    public String formatarData(LocalDate data) {
+        if (data == null) {
+            return "N/A";
+        }
+        return sdf.format(Date.from(data.atStartOfDay(ZoneId.systemDefault()).toInstant()));
     }
 }

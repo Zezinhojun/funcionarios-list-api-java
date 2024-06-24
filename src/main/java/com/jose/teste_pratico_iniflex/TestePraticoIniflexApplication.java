@@ -54,8 +54,7 @@ public class TestePraticoIniflexApplication implements CommandLineRunner {
 
 		for (FuncionarioDTO func : funcionarios) {
 			String nome = func.nome();
-			String dataNascimento = sdf
-					.format(Date.from(func.dataNascimento().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			String dataNascimento = funcionarioService.formatarData(func.dataNascimento());
 			String salario = "R$ " + df.format(func.salario());
 			String funcao = func.funcao();
 
@@ -76,8 +75,7 @@ public class TestePraticoIniflexApplication implements CommandLineRunner {
 
 		for (FuncionarioDTO func : funcionarios) {
 			String nome = func.nome();
-			String dataNascimento = sdf
-					.format(Date.from(func.dataNascimento().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			String dataNascimento = funcionarioService.formatarData(func.dataNascimento());
 			String salario = "R$ " + df.format(func.salario());
 			String funcao = func.funcao();
 
@@ -92,8 +90,11 @@ public class TestePraticoIniflexApplication implements CommandLineRunner {
 		// 3.6 Imprimir funcionários agrupados por função de forma compacta
 		agrupadosPorFuncao.forEach((funcao, funcs) -> {
 			System.out.println(funcao + ":");
-			funcs.forEach(func -> System.out.println(
-					"    - " + func.nome() + ", " + func.dataNascimento() + ", R$ " + df.format(func.salario())));
+			funcs.forEach(func -> {
+				String dataNascimentoFormatada = funcionarioService.formatarData(func.dataNascimento());
+				System.out.println(
+						"    - " + func.nome() + ", " + dataNascimentoFormatada + ", R$ " + df.format(func.salario()));
+			});
 			System.out.println();
 		});
 
