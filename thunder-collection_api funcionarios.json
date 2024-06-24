@@ -1,0 +1,131 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "api funcionarios",
+    "collectionId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+    "dateExported": "2024-06-24T18:38:00.569Z",
+    "version": "1.2",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "d82fad24-6827-42c5-9c4e-538e5fc774f7",
+            "colId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+            "containerId": "",
+            "name": "Deletar usuario pelo nome",
+            "url": "http://localhost:8080/api/funcionarios/João",
+            "method": "DELETE",
+            "sortNum": 10000,
+            "created": "2024-06-24T17:42:23.165Z",
+            "modified": "2024-06-24T17:42:23.165Z",
+            "headers": []
+        },
+        {
+            "_id": "64d8bb7f-f212-4bb0-84d1-96b8196a1dea",
+            "colId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+            "containerId": "",
+            "name": "Quantos salarios minimos cada funcionario ganha",
+            "url": "http://localhost:8080/api/funcionarios/salarios-minimos",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2024-06-24T17:42:30.197Z",
+            "modified": "2024-06-24T17:42:30.197Z",
+            "headers": []
+        },
+        {
+            "_id": "89bc648a-c111-4a57-b852-c2a0d3d534f6",
+            "colId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+            "containerId": "",
+            "name": "Soma total dos salarios dos funcionarios",
+            "url": "http://localhost:8080/api/funcionarios/total-salarios",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2024-06-24T17:42:35.059Z",
+            "modified": "2024-06-24T17:42:35.059Z",
+            "headers": []
+        },
+        {
+            "_id": "db1bd0dd-41a1-48b5-81a3-f1a6197bc357",
+            "colId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+            "containerId": "",
+            "name": "Funcionarios listas em ordem alfabetica",
+            "url": "http://localhost:8080/api/funcionarios/ordenado-alfabetica",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2024-06-24T17:42:38.600Z",
+            "modified": "2024-06-24T17:42:38.600Z",
+            "headers": []
+        },
+        {
+            "_id": "21e2ad05-5e79-49d3-ad5b-05a80c5c85c0",
+            "colId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+            "containerId": "",
+            "name": "Funcionario mais velho",
+            "url": "http://localhost:8080/api/funcionarios/maior-idade",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2024-06-24T17:42:42.463Z",
+            "modified": "2024-06-24T17:42:42.463Z",
+            "headers": []
+        },
+        {
+            "_id": "88bd8129-6812-43da-8a00-15ffeb4441b2",
+            "colId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+            "containerId": "",
+            "name": "aniversariantes do mes 10 e 12",
+            "url": "http://localhost:8080/api/funcionarios/aniversariantes",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2024-06-24T17:42:47.484Z",
+            "modified": "2024-06-24T17:42:47.484Z",
+            "headers": []
+        },
+        {
+            "_id": "7889c56c-2106-4fa6-bc9c-fa67ed7d54c4",
+            "colId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+            "containerId": "",
+            "name": "Inserir funcionarios",
+            "url": "http://localhost:8080/api/funcionarios/inserir-funcionarios",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2024-06-24T17:42:50.938Z",
+            "modified": "2024-06-24T17:42:50.938Z",
+            "headers": []
+        },
+        {
+            "_id": "705f00ae-cfc9-4615-9724-9f7e8106cc3e",
+            "colId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+            "containerId": "",
+            "name": "Listar todos os funcionarios",
+            "url": "http://localhost:8080/api/funcionarios",
+            "method": "GET",
+            "sortNum": 80000,
+            "created": "2024-06-24T17:42:55.264Z",
+            "modified": "2024-06-24T17:42:55.264Z",
+            "headers": []
+        },
+        {
+            "_id": "f1e44e09-f534-451e-bc76-1b6a543b8ac7",
+            "colId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+            "containerId": "",
+            "name": "Aumentar salario em 10%",
+            "url": "http://localhost:8080/api/funcionarios/aumentar-salario",
+            "method": "GET",
+            "sortNum": 90000,
+            "created": "2024-06-24T17:43:03.307Z",
+            "modified": "2024-06-24T17:43:03.307Z",
+            "headers": []
+        },
+        {
+            "_id": "60b43bc1-129c-4154-b2c9-9fa3326e6845",
+            "colId": "7a1d4af9-1360-426f-9928-6ffd93d929c1",
+            "containerId": "",
+            "name": "funcionarios agrupados por funcao",
+            "url": "http://localhost:8080/api/funcionarios/agrupados",
+            "method": "GET",
+            "sortNum": 100000,
+            "created": "2024-06-24T17:43:54.746Z",
+            "modified": "2024-06-24T17:43:54.746Z",
+            "headers": []
+        }
+    ],
+    "ref": "4Itobt03KiCIHKiMuD7HXvDVcXms_Bm-vfEDeM7eXktQtgnoyfWEhrBxn5-N8JScJ8rJYtFNMfEyWToRjSHrzA"
+}
