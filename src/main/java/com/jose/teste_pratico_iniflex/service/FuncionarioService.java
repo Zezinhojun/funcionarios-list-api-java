@@ -42,7 +42,7 @@ public class FuncionarioService {
     public List<FuncionarioDTO> gerarFuncionariosFicticios() {
         List<FuncionarioDTO> funcionariosDTO = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             Long id = (long) (i + 1);
             String nome = faker.name().fullName();
             LocalDate dataNascimento = faker.date().birthday().toInstant()
