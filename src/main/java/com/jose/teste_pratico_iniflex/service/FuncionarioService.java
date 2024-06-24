@@ -70,6 +70,8 @@ public class FuncionarioService {
         Optional<Funcionario> funcionarioOpt = funcionarioRepository.findByNome(nome);
         if (funcionarioOpt.isPresent()) {
             funcionarioRepository.delete(funcionarioOpt.get());
+        } else {
+            throw new RecordNotFoundException(nome);
         }
     }
 
