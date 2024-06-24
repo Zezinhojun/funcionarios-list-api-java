@@ -5,9 +5,11 @@ Este projeto Java foi desenvolvido como parte de um teste prático para uma empr
 ## Requisitos
 
 1. **Classe Pessoa**:
+
    - Atributos: nome (String) e data de nascimento (LocalDate).
 
 2. **Classe Funcionário** (subclasse de Pessoa):
+
    - Atributos adicionais: salário (BigDecimal) e função (String).
 
 3. **Classe Principal**:
@@ -16,30 +18,39 @@ Este projeto Java foi desenvolvido como parte de um teste prático para uma empr
 ### Funcionalidades Implementadas:
 
 - **Inserção de Funcionários**:
+
   - Inicializa a lista de funcionários com dados fictícios.
 
 - **Remoção de Funcionário**:
+
   - Remove o funcionário "João" da lista.
 
 - **Impressão de Funcionários**:
+
   - Todos os funcionários são impressos com suas informações formatadas corretamente (nome, data de nascimento, salário e função).
 
 - **Aumento Salarial**:
+
   - Aumenta o salário de todos os funcionários em 10%.
 
 - **Agrupamento por Função**:
+
   - Agrupa os funcionários por função em um mapa, exibindo os funcionários agrupados de forma compacta.
 
 - **Funcionários que Fazem Aniversário**:
+
   - Imprime os funcionários que fazem aniversário nos meses de outubro (10) e dezembro (12).
 
 - **Funcionário Mais Velho**:
+
   - Identifica e imprime o funcionário mais velho, exibindo seu nome e idade.
 
 - **Lista de Funcionários em Ordem Alfabética**:
+
   - Ordena e imprime a lista de funcionários por ordem alfabética de nome.
 
 - **Total dos Salários**:
+
   - Calcula e imprime o total dos salários de todos os funcionários.
 
 - **Salários Mínimos Recebidos**:
@@ -68,6 +79,8 @@ Este projeto Java foi desenvolvido como parte de um teste prático para uma empr
 
 - Certifique-se de ter o Maven e o Java instalados localmente.
 - Os dados de funcionários são gerados aleatoriamente para fins de teste.
+- Caso a geração automática de funcionários não forneça pelo menos um funcionário por profissão conforme necessário, é possível ajustar o número de funcionários gerados modificando a variável numeroFuncionarios no método gerarFuncionariosFicticios localizado em:
+  src/main/java/com/jose/teste_pratico_iniflex/service/FuncionarioService.java:
 
 ---
 
