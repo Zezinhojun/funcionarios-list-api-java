@@ -3,11 +3,13 @@ package com.jose.teste_pratico_iniflex.service;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,7 @@ public class FuncionarioService {
     public List<FuncionarioDTO> gerarFuncionariosFicticios() {
         List<FuncionarioDTO> funcionariosDTO = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) { // Gerando 10 funcionários fictícios
+        for (int i = 0; i < 10; i++) { // Gerando 10 funcionários fictícios
             Long id = (long) (i + 1);
             String nome = faker.name().fullName();
             LocalDate dataNascimento = faker.date().birthday().toInstant()
@@ -93,11 +95,6 @@ public class FuncionarioService {
         return funcionarios;
     }
 
-    private String formatarValorNumerico(BigDecimal valor) {
-        DecimalFormat df = new DecimalFormat("#,##0.00");
-        return df.format(valor.doubleValue());
-    }
-
     public Map<String, List<Funcionario>> agruparPorFuncao() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
         return funcionarios.stream()
@@ -117,6 +114,24 @@ public class FuncionarioService {
         return funcionariosFiltrados.stream()
                 .map(funcionarioMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, Object> funcionarioMaisVelho() {
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
+
+        Optional<Funcionario> funcionarioOpt = funcionarios.stream()
+                .max(Comparator.comparingInt(
+                        funcionario -> Period.between(funcionario.getDataNascimento(), LocalDate.now()).getYears()));
+
+        if (!funcionarioOpt.isPresent()) {
+            throw new RecordNotFoundException("Nenhum funcionário encontrado");
+        }
+
+        Funcionario funcionarioMaisVelho = funcionarioOpt.get();
+        Map<String, Object> funcionarioDetalhes = Map.of(
+                "nome", funcionarioMaisVelho.getNome(),
+                "idade", Period.between(funcionarioMaisVelho.getDataNascimento(), LocalDate.now()).getYears());
+        return funcionarioDetalhes;
     }
 
 }

@@ -84,4 +84,10 @@ public class FuncionarioController {
         return new ResponseEntity<>(aniversariantes, HttpStatus.OK);
     }
 
+    @GetMapping("/maior-idade")
+    public ResponseEntity<Map<String, Object>> funcionarioMaiorIdade() {
+        Map<String, Object> funcionarioDetalhes = funcionarioService.funcionarioMaisVelho();
+        return new ResponseEntity<>(funcionarioDetalhes, HttpStatus.OK);
+    }
+
 }
