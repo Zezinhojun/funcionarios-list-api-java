@@ -42,9 +42,10 @@ public class FuncionarioController {
         }
     }
 
-    @GetMapping("/funcionarios")
-    public void listarTodosOsFuncionarios() {
-        funcionarioService.listarTodosOsFuncionarios();
+    @GetMapping("")
+    public ResponseEntity<List<Funcionario>> listarTodosOsFuncionarios() {
+        List<Funcionario> funcionarios = funcionarioService.listarTodosOsFuncionarios();
+        return ResponseEntity.ok(funcionarios);
     }
 
     @GetMapping("/aumentar-salario")
@@ -59,7 +60,7 @@ public class FuncionarioController {
         return ResponseEntity.ok(funcionariosAgrupados);
     }
 
-    @GetMapping("/funcionarios/aniversariantes")
+    @GetMapping("/aniversariantes")
     public String imprimirFuncionariosAniversariantes() {
         funcionarioService.imprimirFuncionariosAniversariantes();
         return "Funcionários que fazem aniversário nos meses de outubro e dezembro foram impressos.";

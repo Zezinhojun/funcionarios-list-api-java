@@ -63,18 +63,8 @@ public class FuncionarioService {
         }
     }
 
-    public void listarTodosOsFuncionarios() {
-        List<Funcionario> funcionarios = funcionarioRepository.findAll();
-
-        for (Funcionario funcionario : funcionarios) {
-            System.out.println("ID: " + funcionario.getId());
-            System.out.println("Nome: " + funcionario.getNome());
-            System.out.println("Função: " + funcionario.getFuncao());
-            System.out.println("Salário: " + formatarValorNumerico(funcionario.getSalario())); // Supondo que getSalario
-                                                                                               // retorne BigDecimal
-            System.out.println("Data de Nascimento: " + formatarData(funcionario.getDataNascimento()));
-            System.out.println("-------------------------");
-        }
+    public List<Funcionario> listarTodosOsFuncionarios() {
+        return funcionarioRepository.findAll();
     }
 
     public void aumentarSalario() {
@@ -106,7 +96,6 @@ public class FuncionarioService {
     public void imprimirFuncionariosAniversariantes() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
 
-        // Filtrar funcionários que fazem aniversário nos meses de outubro e dezembro
         List<Funcionario> funcionariosFiltrados = funcionarios.stream()
                 .filter(funcionario -> {
                     LocalDate dataNascimento = funcionario.getDataNascimento(); // Supondo que getDataNascimento()
@@ -114,8 +103,6 @@ public class FuncionarioService {
                     return dataNascimento.getMonthValue() == 10 || dataNascimento.getMonthValue() == 12;
                 })
                 .collect(Collectors.toList());
-
-        // Imprimir os funcionários filtrados
         funcionariosFiltrados.forEach(funcionario -> {
             System.out.println("Função: " + funcionario.getFuncao());
             System.out.println("ID: " + funcionario.getId());
