@@ -56,6 +56,15 @@ public class FuncionarioService {
             funcionariosDTO.add(funcionarioDTO);
         }
 
+        Long idJoao = (long) (funcionariosDTO.size() + 1);
+        String nomeJoao = "João";
+        LocalDate dataNascimentoJoao = LocalDate.of(1995, 10, 24);
+        BigDecimal salarioJoao = new BigDecimal("3500.00");
+        String funcaoJoao = "Desenvolvedor Fullstack";
+
+        FuncionarioDTO joaoDTO = new FuncionarioDTO(idJoao, nomeJoao, dataNascimentoJoao, funcaoJoao, salarioJoao);
+        funcionariosDTO.add(joaoDTO);
+
         List<Funcionario> funcionarios = new ArrayList<>();
         for (FuncionarioDTO dto : funcionariosDTO) {
             Funcionario funcionario = funcionarioMapper.toEntity(dto);
