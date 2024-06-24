@@ -128,10 +128,18 @@ public class FuncionarioService {
         }
 
         Funcionario funcionarioMaisVelho = funcionarioOpt.get();
-        Map<String, Object> funcionarioDetalhes = Map.of(
+        return Map.of(
                 "nome", funcionarioMaisVelho.getNome(),
                 "idade", Period.between(funcionarioMaisVelho.getDataNascimento(), LocalDate.now()).getYears());
-        return funcionarioDetalhes;
+    }
+
+    public List<FuncionarioDTO> listarFuncionariosOrdenAlfabetica() {
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        List<FuncionarioDTO> funcionariosDTO = funcionarios.stream()
+                .map(funcionarioMapper::toDto)
+                .sorted(Comparator.comparing(FuncionarioDTO::nome)) // Correção aqui
+                .collect(Collectors.toList()); // Removendo a variável temporária
+        return funcionariosDTO;
     }
 
 }

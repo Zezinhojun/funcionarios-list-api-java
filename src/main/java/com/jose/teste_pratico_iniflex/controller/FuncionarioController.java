@@ -90,4 +90,10 @@ public class FuncionarioController {
         return new ResponseEntity<>(funcionarioDetalhes, HttpStatus.OK);
     }
 
+    @GetMapping("/ordenado-alfabetica")
+    public ResponseEntity<List<FuncionarioDTO>> listarFuncionariosOrdenAlfabetica() {
+        List<FuncionarioDTO> funcionariosOrdenados = funcionarioService.listarFuncionariosOrdenAlfabetica();
+        return ResponseEntity.ok(funcionariosOrdenados);
+    }
+
 }
