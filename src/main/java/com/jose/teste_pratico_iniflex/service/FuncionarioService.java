@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +14,12 @@ import org.springframework.stereotype.Service;
 import com.github.javafaker.Faker;
 import com.jose.teste_pratico_iniflex.dto.FuncionarioDTO;
 import com.jose.teste_pratico_iniflex.dto.mapper.FuncionarioMapper;
+import com.jose.teste_pratico_iniflex.exception.RecordNotFoundException;
 import com.jose.teste_pratico_iniflex.model.Funcionario;
 import com.jose.teste_pratico_iniflex.repository.FuncionarioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
 
 @Service
 public class FuncionarioService {
@@ -53,33 +54,32 @@ public class FuncionarioService {
         }
     }
 
-    public void removerFuncionarioPorNome(String nome) {
-        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByNome(nome);
-        if (funcionarioOptional.isPresent()) {
-            Funcionario funcionario = funcionarioOptional.get();
-            funcionarioRepository.delete(funcionario);
-        } else {
-            throw new EntityNotFoundException("Funcionário com nome '" + nome + "' não encontrado");
-        }
+    public void removerFuncionarioPorNome(@NotNull String nome) {
+        funcionarioRepository.delete(funcionarioRepository.findByNome(nome)
+                .orElseThrow(() -> new RecordNotFoundException(nome)));
     }
 
     public List<Funcionario> listarTodosOsFuncionarios() {
         return funcionarioRepository.findAll();
     }
 
-    public void aumentarSalario() {
+    public List<Funcionario> aumentarSalario() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
 
+        DecimalFormat df = new DecimalFormat("#.##"); // Define o padrão de formatação
+
         for (Funcionario funcionario : funcionarios) {
-            BigDecimal novoSalario = funcionario.getSalario().multiply(new BigDecimal("1.10"));
-            funcionario.setSalario(novoSalario);
+            BigDecimal salarioOriginal = funcionario.getSalario();
+            BigDecimal novoSalario = salarioOriginal.multiply(new BigDecimal("1.10"));
+            String salarioFormatado = df.format(novoSalario); // Formata o salário para 2 casas decimais
+            BigDecimal salarioFinal = new BigDecimal(salarioFormatado.replace(',', '.')); // Substitui vírgula por ponto
+                                                                                          // e converte para BigDecimal
+
+            funcionario.setSalario(salarioFinal);
             funcionarioRepository.save(funcionario);
         }
-    }
 
-    private String formatarData(LocalDate data) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return data.format(formatter);
+        return funcionarios;
     }
 
     private String formatarValorNumerico(BigDecimal valor) {
