@@ -1,6 +1,7 @@
 package com.jose.teste_pratico_iniflex.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +95,12 @@ public class FuncionarioController {
     public ResponseEntity<List<FuncionarioDTO>> listarFuncionariosOrdenAlfabetica() {
         List<FuncionarioDTO> funcionariosOrdenados = funcionarioService.listarFuncionariosOrdenAlfabetica();
         return ResponseEntity.ok(funcionariosOrdenados);
+    }
+
+    @GetMapping("/total-salarios")
+    public ResponseEntity<BigDecimal> getTotalSalarios() {
+        BigDecimal totalSalarios = funcionarioService.calcularTotalSalarios();
+        return ResponseEntity.ok(totalSalarios);
     }
 
 }

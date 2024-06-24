@@ -37,7 +37,7 @@ public class FuncionarioService {
     public List<FuncionarioDTO> gerarFuncionariosFicticios() {
         List<FuncionarioDTO> funcionariosDTO = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) { // Gerando 10 funcionários fictícios
+        for (int i = 0; i < 3; i++) { // Gerando 10 funcionários fictícios
             Long id = (long) (i + 1);
             String nome = faker.name().fullName();
             LocalDate dataNascimento = faker.date().birthday().toInstant()
@@ -137,9 +137,16 @@ public class FuncionarioService {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
         List<FuncionarioDTO> funcionariosDTO = funcionarios.stream()
                 .map(funcionarioMapper::toDto)
-                .sorted(Comparator.comparing(FuncionarioDTO::nome)) // Correção aqui
-                .collect(Collectors.toList()); // Removendo a variável temporária
+                .sorted(Comparator.comparing(FuncionarioDTO::nome))
+                .collect(Collectors.toList());
         return funcionariosDTO;
     }
 
+    public BigDecimal calcularTotalSalarios() {
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
+
+        return funcionarios.stream()
+                .map(Funcionario::getSalario)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }
