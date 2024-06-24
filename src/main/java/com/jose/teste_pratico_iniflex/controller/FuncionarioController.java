@@ -103,4 +103,11 @@ public class FuncionarioController {
         return ResponseEntity.ok(totalSalarios);
     }
 
+    @GetMapping("/salarios-minimos")
+    public ResponseEntity<List<Map<String, Object>>> calcularSalariosMinimosDosFuncionarios() {
+        List<Map<String, Object>> salariosMinimos = funcionarioService
+                .calcularQuantificarSalariosMinimosDosFuncionarios();
+        return ResponseEntity.ok(salariosMinimos);
+    }
+
 }

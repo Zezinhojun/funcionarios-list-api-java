@@ -1,12 +1,14 @@
 package com.jose.teste_pratico_iniflex.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +29,7 @@ public class FuncionarioService {
     private final FuncionarioRepository funcionarioRepository;
     private final FuncionarioMapper funcionarioMapper;
     private final Faker faker = new Faker();
-    private final BigDecimal SALARIO_MINIMO = new BigDecimal("1212.00");
+    private final BigDecimal minSalary = new BigDecimal("1212.00");
 
     public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper) {
         this.funcionarioRepository = funcionarioRepository;
@@ -37,7 +39,7 @@ public class FuncionarioService {
     public List<FuncionarioDTO> gerarFuncionariosFicticios() {
         List<FuncionarioDTO> funcionariosDTO = new ArrayList<>();
 
-        for (int i = 0; i < 3; i++) { // Gerando 10 funcionários fictícios
+        for (int i = 0; i < 4; i++) {
             Long id = (long) (i + 1);
             String nome = faker.name().fullName();
             LocalDate dataNascimento = faker.date().birthday().toInstant()
@@ -80,7 +82,7 @@ public class FuncionarioService {
     public List<Funcionario> aumentarSalario() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
 
-        DecimalFormat df = new DecimalFormat("#.##"); // Define o padrão de formatação
+        DecimalFormat df = new DecimalFormat("#.##");
 
         for (Funcionario funcionario : funcionarios) {
             BigDecimal salarioOriginal = funcionario.getSalario();
@@ -135,11 +137,10 @@ public class FuncionarioService {
 
     public List<FuncionarioDTO> listarFuncionariosOrdenAlfabetica() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
-        List<FuncionarioDTO> funcionariosDTO = funcionarios.stream()
+        return funcionarios.stream()
                 .map(funcionarioMapper::toDto)
                 .sorted(Comparator.comparing(FuncionarioDTO::nome))
                 .collect(Collectors.toList());
-        return funcionariosDTO;
     }
 
     public BigDecimal calcularTotalSalarios() {
@@ -148,5 +149,22 @@ public class FuncionarioService {
         return funcionarios.stream()
                 .map(Funcionario::getSalario)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public List<Map<String, Object>> calcularQuantificarSalariosMinimosDosFuncionarios() {
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
+
+        return funcionarios.stream()
+                .map(funcionario -> {
+                    BigDecimal salarioAtual = funcionario.getSalario();
+                    BigDecimal salarioMinimos = salarioAtual.divide(minSalary, 2, RoundingMode.HALF_UP);
+                    Map<String, Object> mapaFuncionario = new HashMap<>();
+                    mapaFuncionario.put("id", funcionario.getId());
+                    mapaFuncionario.put("nome", funcionario.getNome());
+                    mapaFuncionario.put("salarioMinimos", salarioMinimos.doubleValue());
+
+                    return mapaFuncionario;
+                })
+                .collect(Collectors.toList());
     }
 }
