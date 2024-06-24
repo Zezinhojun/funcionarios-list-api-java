@@ -97,7 +97,7 @@ public class TestePraticoIniflexApplication implements CommandLineRunner {
 			System.out.println();
 		});
 
-		// 3.7 Imprimir funcionários que fazem aniversário em outubro (10) ou dezembro
+		// 3.8 Imprimir funcionários que fazem aniversário em outubro (10) ou dezembro
 		// (12)
 		System.out.println("Funcionários que fazem aniversário em outubro (10) ou dezembro (12):");
 		System.out.printf("| %-20s | %-15s |\n", "Nome", "Data de Nascimento");
