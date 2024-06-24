@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.github.javafaker.Faker;
 import com.jose.teste_pratico_iniflex.dto.FuncionarioDTO;
@@ -24,6 +25,7 @@ import com.jose.teste_pratico_iniflex.repository.FuncionarioRepository;
 
 import jakarta.validation.constraints.NotNull;
 
+@Validated
 @Service
 public class FuncionarioService {
     private final FuncionarioRepository funcionarioRepository;
@@ -39,7 +41,7 @@ public class FuncionarioService {
     public List<FuncionarioDTO> gerarFuncionariosFicticios() {
         List<FuncionarioDTO> funcionariosDTO = new ArrayList<>();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 100; i++) {
             Long id = (long) (i + 1);
             String nome = faker.name().fullName();
             LocalDate dataNascimento = faker.date().birthday().toInstant()
@@ -64,12 +66,6 @@ public class FuncionarioService {
         return funcionariosDTO;
     }
 
-    public FuncionarioDTO inserirFuncionario(FuncionarioDTO funcionarioDTO) {
-        Funcionario entity = funcionarioMapper.toEntity(funcionarioDTO);
-        Funcionario savedEntity = funcionarioRepository.save(entity);
-        return funcionarioMapper.toDto(savedEntity);
-    }
-
     public void removerFuncionarioPorNome(@NotNull String nome) {
         Optional<Funcionario> funcionarioOpt = funcionarioRepository.findByNome(nome);
         if (funcionarioOpt.isPresent()) {
@@ -77,11 +73,14 @@ public class FuncionarioService {
         }
     }
 
-    public List<Funcionario> listarTodosOsFuncionarios() {
-        return funcionarioRepository.findAll();
+    public List<FuncionarioDTO> listarTodosOsFuncionarios() {
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        return funcionarios.stream()
+                .map(funcionarioMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public List<Funcionario> aumentarSalario() {
+    public List<FuncionarioDTO> aumentarSalario() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
 
         DecimalFormat df = new DecimalFormat("#.##");
@@ -95,14 +94,16 @@ public class FuncionarioService {
             funcionario.setSalario(salarioFinal);
             funcionarioRepository.save(funcionario);
         }
-
-        return funcionarios;
+        return funcionarios.stream()
+                .map(funcionarioMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Map<String, List<Funcionario>> agruparPorFuncao() {
+    public Map<String, List<FuncionarioDTO>> agruparPorFuncao() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
         return funcionarios.stream()
-                .collect(Collectors.groupingBy(Funcionario::getFuncao));
+                .map(funcionarioMapper::toDto)
+                .collect(Collectors.groupingBy(FuncionarioDTO::funcao));
     }
 
     public List<FuncionarioDTO> listarFuncionariosAniversariantes() {

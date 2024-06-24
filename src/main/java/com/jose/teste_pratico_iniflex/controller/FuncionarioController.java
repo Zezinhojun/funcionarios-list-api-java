@@ -1,8 +1,6 @@
 package com.jose.teste_pratico_iniflex.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -13,17 +11,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jose.teste_pratico_iniflex.dto.FuncionarioDTO;
-import com.jose.teste_pratico_iniflex.model.Funcionario;
 import com.jose.teste_pratico_iniflex.service.FuncionarioService;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
@@ -45,13 +39,6 @@ public class FuncionarioController {
         return ResponseEntity.ok(mensagem);
     }
 
-    @PostMapping("/inserir")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<FuncionarioDTO> inserirFuncionario(@Valid @RequestBody FuncionarioDTO funcionario) {
-        FuncionarioDTO savedDto = funcionarioService.inserirFuncionario(funcionario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedDto);
-    }
-
     @DeleteMapping("/{nome}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removerFuncionarioPorNome(@PathVariable @NotNull String nome) {
@@ -59,33 +46,33 @@ public class FuncionarioController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Funcionario>> listarTodosOsFuncionarios() {
-        List<Funcionario> funcionarios = funcionarioService.listarTodosOsFuncionarios();
-        return ResponseEntity.ok(funcionarios);
+    public ResponseEntity<List<FuncionarioDTO>> listarTodosOsFuncionarios() {
+        List<FuncionarioDTO> funcionariosDTO = funcionarioService.listarTodosOsFuncionarios();
+        return ResponseEntity.ok(funcionariosDTO);
     }
 
     @GetMapping("/aumentar-salario")
-    public ResponseEntity<List<Funcionario>> aumentarSalario() {
-        List<Funcionario> funcionariosAtualizados = funcionarioService.aumentarSalario();
+    public ResponseEntity<List<FuncionarioDTO>> aumentarSalario() {
+        List<FuncionarioDTO> funcionariosAtualizados = funcionarioService.aumentarSalario();
         return ResponseEntity.ok(funcionariosAtualizados);
     }
 
     @GetMapping("/agrupados")
-    public ResponseEntity<Map<String, List<Funcionario>>> getFuncionariosAgrupados() {
-        Map<String, List<Funcionario>> funcionariosAgrupados = funcionarioService.agruparPorFuncao();
+    public ResponseEntity<Map<String, List<FuncionarioDTO>>> getFuncionariosAgrupados() {
+        Map<String, List<FuncionarioDTO>> funcionariosAgrupados = funcionarioService.agruparPorFuncao();
         return ResponseEntity.ok(funcionariosAgrupados);
     }
 
     @GetMapping("/aniversariantes")
     public ResponseEntity<List<FuncionarioDTO>> listarFuncionariosAniversariantes() {
         List<FuncionarioDTO> aniversariantes = funcionarioService.listarFuncionariosAniversariantes();
-        return new ResponseEntity<>(aniversariantes, HttpStatus.OK);
+        return ResponseEntity.ok(aniversariantes);
     }
 
     @GetMapping("/maior-idade")
     public ResponseEntity<Map<String, Object>> funcionarioMaiorIdade() {
         Map<String, Object> funcionarioDetalhes = funcionarioService.funcionarioMaisVelho();
-        return new ResponseEntity<>(funcionarioDetalhes, HttpStatus.OK);
+        return ResponseEntity.ok(funcionarioDetalhes);
     }
 
     @GetMapping("/ordenado-alfabetica")
