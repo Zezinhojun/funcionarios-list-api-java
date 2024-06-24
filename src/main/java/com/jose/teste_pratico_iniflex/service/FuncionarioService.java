@@ -7,7 +7,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +18,6 @@ import com.jose.teste_pratico_iniflex.exception.RecordNotFoundException;
 import com.jose.teste_pratico_iniflex.model.Funcionario;
 import com.jose.teste_pratico_iniflex.repository.FuncionarioRepository;
 
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Service
@@ -86,9 +83,8 @@ public class FuncionarioService {
         for (Funcionario funcionario : funcionarios) {
             BigDecimal salarioOriginal = funcionario.getSalario();
             BigDecimal novoSalario = salarioOriginal.multiply(new BigDecimal("1.10"));
-            String salarioFormatado = df.format(novoSalario); // Formata o salário para 2 casas decimais
-            BigDecimal salarioFinal = new BigDecimal(salarioFormatado.replace(',', '.')); // Substitui vírgula por ponto
-                                                                                          // e converte para BigDecimal
+            String salarioFormatado = df.format(novoSalario);
+            BigDecimal salarioFinal = new BigDecimal(salarioFormatado.replace(',', '.'));
 
             funcionario.setSalario(salarioFinal);
             funcionarioRepository.save(funcionario);
@@ -108,24 +104,19 @@ public class FuncionarioService {
                 .collect(Collectors.groupingBy(Funcionario::getFuncao));
     }
 
-    public void imprimirFuncionariosAniversariantes() {
+    public List<FuncionarioDTO> listarFuncionariosAniversariantes() {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
 
         List<Funcionario> funcionariosFiltrados = funcionarios.stream()
                 .filter(funcionario -> {
-                    LocalDate dataNascimento = funcionario.getDataNascimento(); // Supondo que getDataNascimento()
-                                                                                // retorne LocalDate
+                    LocalDate dataNascimento = funcionario.getDataNascimento();
                     return dataNascimento.getMonthValue() == 10 || dataNascimento.getMonthValue() == 12;
                 })
                 .collect(Collectors.toList());
-        funcionariosFiltrados.forEach(funcionario -> {
-            System.out.println("Função: " + funcionario.getFuncao());
-            System.out.println("ID: " + funcionario.getId());
-            System.out.println("Nome: " + funcionario.getNome());
-            System.out.println("Data de Nascimento: " + funcionario.getDataNascimento());
-            System.out.println("Salário: " + formatarValorNumerico(funcionario.getSalario()));
-            System.out.println("-------------------------");
-        });
+
+        return funcionariosFiltrados.stream()
+                .map(funcionarioMapper::toDto)
+                .collect(Collectors.toList());
     }
 
 }

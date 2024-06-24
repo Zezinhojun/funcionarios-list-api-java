@@ -79,9 +79,9 @@ public class FuncionarioController {
     }
 
     @GetMapping("/aniversariantes")
-    public String imprimirFuncionariosAniversariantes() {
-        funcionarioService.imprimirFuncionariosAniversariantes();
-        return "Funcionários que fazem aniversário nos meses de outubro e dezembro foram impressos.";
+    public ResponseEntity<List<FuncionarioDTO>> listarFuncionariosAniversariantes() {
+        List<FuncionarioDTO> aniversariantes = funcionarioService.listarFuncionariosAniversariantes();
+        return new ResponseEntity<>(aniversariantes, HttpStatus.OK);
     }
 
 }
