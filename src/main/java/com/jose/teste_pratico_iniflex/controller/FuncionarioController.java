@@ -9,16 +9,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jose.teste_pratico_iniflex.dto.FuncionarioDTO;
 import com.jose.teste_pratico_iniflex.model.Funcionario;
-import com.jose.teste_pratico_iniflex.repository.FuncionarioRepository;
 import com.jose.teste_pratico_iniflex.service.FuncionarioService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -27,18 +29,27 @@ import lombok.AllArgsConstructor;
 
 public class FuncionarioController {
 
-    private FuncionarioRepository funcionarioRepository;
     private FuncionarioService funcionarioService;
 
     @GetMapping("/inserir-funcionarios")
-    public String inserirFuncionarios() {
-        funcionarioService.inserirFuncionarios();
-        return "Funcionários inseridos com sucesso!";
+    public ResponseEntity<String> inserirFuncionarios() {
+        List<FuncionarioDTO> funcionariosInseridos = funcionarioService.gerarFuncionariosFicticios();
+        int quantidadeInserida = funcionariosInseridos.size();
+
+        String mensagem = String.format("Inseridos %d funcionários fictícios com sucesso!", quantidadeInserida);
+        return ResponseEntity.ok(mensagem);
     }
 
-    @DeleteMapping("/nome/{nome}")
+    @PostMapping("/inserir")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<FuncionarioDTO> inserirFuncionario(@Valid @RequestBody FuncionarioDTO funcionario) {
+        FuncionarioDTO savedDto = funcionarioService.inserirFuncionario(funcionario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedDto);
+    }
+
+    @DeleteMapping("/{nome}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> removerFuncionarioPorNome(@PathVariable String nome) {
+    public ResponseEntity<Void> removerFuncionarioPorNome(String nome) {
         String nomeDecodificado;
         try {
             nomeDecodificado = URLDecoder.decode(nome, "UTF-8");

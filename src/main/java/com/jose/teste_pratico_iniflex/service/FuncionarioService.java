@@ -19,6 +19,8 @@ import com.jose.teste_pratico_iniflex.model.Funcionario;
 import com.jose.teste_pratico_iniflex.repository.FuncionarioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Service
@@ -33,9 +35,11 @@ public class FuncionarioService {
         this.funcionarioMapper = funcionarioMapper;
     }
 
-    public void inserirFuncionarios() {
-        List<FuncionarioDTO> funcionarioDTO = new ArrayList<>();
-        for (int i = 0; i < 400; i++) {
+    public List<FuncionarioDTO> gerarFuncionariosFicticios() {
+        List<FuncionarioDTO> funcionariosDTO = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) { // Gerando 10 funcionários fictícios
+            Long id = (long) (i + 1);
             String nome = faker.name().fullName();
             LocalDate dataNascimento = faker.date().birthday().toInstant()
                     .atZone(ZoneId.systemDefault())
@@ -44,14 +48,25 @@ public class FuncionarioService {
             BigDecimal salario = BigDecimal.valueOf(faker.number().randomDouble(2, 1000, 5000));
             String funcao = faker.job().title();
 
-            FuncionarioDTO dto = new FuncionarioDTO(null, nome, dataNascimento, funcao, salario);
-            funcionarioDTO.add(dto);
+            FuncionarioDTO funcionarioDTO = new FuncionarioDTO(id, nome, dataNascimento, funcao, salario);
+            funcionariosDTO.add(funcionarioDTO);
         }
 
-        for (FuncionarioDTO dto : funcionarioDTO) {
+        List<Funcionario> funcionarios = new ArrayList<>();
+        for (FuncionarioDTO dto : funcionariosDTO) {
             Funcionario funcionario = funcionarioMapper.toEntity(dto);
-            funcionarioRepository.save(funcionario);
+            funcionarios.add(funcionario);
         }
+
+        funcionarioRepository.saveAll(funcionarios);
+
+        return funcionariosDTO;
+    }
+
+    public FuncionarioDTO inserirFuncionario(FuncionarioDTO funcionarioDTO) {
+        Funcionario entity = funcionarioMapper.toEntity(funcionarioDTO);
+        Funcionario savedEntity = funcionarioRepository.save(entity);
+        return funcionarioMapper.toDto(savedEntity);
     }
 
     public void removerFuncionarioPorNome(@NotNull String nome) {

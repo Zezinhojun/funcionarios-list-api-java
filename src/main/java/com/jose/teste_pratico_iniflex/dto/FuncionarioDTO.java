@@ -3,10 +3,17 @@ package com.jose.teste_pratico_iniflex.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public record FuncionarioDTO(
+
                 Long id,
-                String nome,
+                @NotNull String nome,
                 LocalDate dataNascimento,
-                String funcao,
-                BigDecimal salario) {
+                @NotNull @NotBlank String funcao,
+                BigDecimal salario
+
+) {
+
 }
