@@ -2,20 +2,14 @@ package com.jose.teste_pratico_iniflex.service;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.github.javafaker.Faker;
@@ -25,7 +19,6 @@ import com.jose.teste_pratico_iniflex.model.Funcionario;
 import com.jose.teste_pratico_iniflex.repository.FuncionarioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.TypedQuery;
 
 @Service
 public class FuncionarioService {
@@ -41,7 +34,7 @@ public class FuncionarioService {
 
     public void inserirFuncionarios() {
         List<FuncionarioDTO> funcionarioDTO = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 400; i++) {
             String nome = faker.name().fullName();
             LocalDate dataNascimento = faker.date().birthday().toInstant()
                     .atZone(ZoneId.systemDefault())
@@ -102,6 +95,35 @@ public class FuncionarioService {
     private String formatarValorNumerico(BigDecimal valor) {
         DecimalFormat df = new DecimalFormat("#,##0.00");
         return df.format(valor.doubleValue());
+    }
+
+    public Map<String, List<Funcionario>> agruparPorFuncao() {
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        return funcionarios.stream()
+                .collect(Collectors.groupingBy(Funcionario::getFuncao));
+    }
+
+    public void imprimirFuncionariosAniversariantes() {
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
+
+        // Filtrar funcionários que fazem aniversário nos meses de outubro e dezembro
+        List<Funcionario> funcionariosFiltrados = funcionarios.stream()
+                .filter(funcionario -> {
+                    LocalDate dataNascimento = funcionario.getDataNascimento(); // Supondo que getDataNascimento()
+                                                                                // retorne LocalDate
+                    return dataNascimento.getMonthValue() == 10 || dataNascimento.getMonthValue() == 12;
+                })
+                .collect(Collectors.toList());
+
+        // Imprimir os funcionários filtrados
+        funcionariosFiltrados.forEach(funcionario -> {
+            System.out.println("Função: " + funcionario.getFuncao());
+            System.out.println("ID: " + funcionario.getId());
+            System.out.println("Nome: " + funcionario.getNome());
+            System.out.println("Data de Nascimento: " + funcionario.getDataNascimento());
+            System.out.println("Salário: " + formatarValorNumerico(funcionario.getSalario()));
+            System.out.println("-------------------------");
+        });
     }
 
 }
